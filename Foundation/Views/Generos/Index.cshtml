@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Modelos.GenerosDTO>
+
+@{
+    Layout = null;
+
+    string @class;
+}
+
+@{
+    if (Request.QueryString["generoId"] != null && Request.QueryString["generoId"] == "0")
+    {
+         @@class = "active";
+    }
+    else
+    {
+        if(Request.QueryString["generoId"] == null)
+        {
+             @@class = "active";
+        }
+        else
+        {
+             @@class = "";
+        }
+    }
+}
+
+    <li class="@(@class)">
+        @Html.ActionLink("Todos", "index", "juegos",  new {  generoId = 0 }, null)
+    </li>
+
+@foreach (var genero in Model)
+{
+    if (Request.QueryString["generoId"] != null && Request.QueryString["generoId"] == genero.Id.ToString())
+    {
+        @@class = "active";
+    }
+    else
+    {
+        @@class = "";
+    }
+    
+    <li class="@(@class)">
+        @Html.ActionLink(genero.Nombre, "index", "juegos",  new {  generoId = genero.Id }, null)
+    </li>
+    
+}
+

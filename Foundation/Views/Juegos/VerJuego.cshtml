@@ -1,0 +1,129 @@
+﻿@model Modelos.JuegosDTO
+
+@{
+    ViewBag.Title = Model.Nombre + "|" + Model.ConsolasDTO.Nombre;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row panel-custom">
+    <div class="columns large-12">
+
+        <!--Breadcrumbs-->
+        <div class="row">
+            <div class="columns large-12">
+                <ul class="breadcrumbs">
+                    <li><a href="/">Inicio</a></li>
+                    <li><a href="@ViewBag.UrlConsola">@ViewBag.NombreConsola</a></li>
+                    <li>@Model.Nombre</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="columns large-12">
+                <h3>
+                    <a href="#">
+                        @Model.Nombre
+                    </a>
+                </h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <!--Portada-->
+            <div class="columns large-3">
+                @{
+                    var urlImagenes = System.Configuration.ConfigurationManager.AppSettings["UrlImagenes"];
+                    var imagenPortada = Model.ListaImagenes.FirstOrDefault(r => r.EsPortada);
+                    string urlImagenPortada = string.Empty;
+
+                    if (imagenPortada != null)
+                    {
+                        urlImagenPortada = urlImagenes + imagenPortada.UrlImagenMediana.Replace("~", "");
+                    }
+                    
+                    
+                }
+
+                <div class="row">
+                    <div class="columns large-6 large-centered">
+                        <img src="@urlImagenPortada" alt="@Model.Nombre" />
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="columns large-12 large-centered">
+                        <h5 class="subheader" >Genero: @Model.GenerosDTO.Nombre</h5>                        
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="columns large-12 large-centered">
+                        <h5 class="subheader" >Consola: @Model.ConsolasDTO.Nombre</h5>                        
+                    </div>
+                </div>
+                <hr />
+                <div class="row">
+                    <div class="columns large-10 large-centered">
+                        <img src="~/Content/Imagenes/redessociales-icons.jpg" />
+                    </div>
+                </div>
+
+            </div>
+            <!--Orbit-->
+            <div class="columns large-9">
+
+                <div class="section-container auto" data-section="" data-options="deep_linking: true;" data-section-resized="true" style="min-height: 50px;">
+                    <section class="active" style="padding-top: 49px;">
+                        <p class="title" data-section-title="" style="left: 0px;"><a href="#panel1">Imagenes</a></p>
+                        <div class="content" data-slug="panel1" data-section-content="">
+
+                            <div class="row">
+                                <div class="large-10 columns large-centered columns">
+                                    <div class="slideshow-wrapper">
+                                        <ul data-orbit="">
+
+                                            @foreach (var imagen in Model.ListaImagenes)
+                                            {
+                                                if (!imagen.EsPortada)
+                                                {
+                                                    var urlImagen = urlImagenes + imagen.UrlImagenMediana.Replace("~", "");
+                                    
+                                                <li>
+                                                    <img src="@urlImagen" />
+                                                </li>
+                                                }
+                                            }
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </section>
+
+                    <section style="padding-top: 49px;">
+                        <p class="title" data-section-title="" style="left: 86px;"><a href="#panel2">Video</a></p>
+                        <div class="content" data-slug="panel2" data-section-content="">
+                            <div class="row">
+                                <div class="large-10 columns large-centered columns">
+                                    @Html.Raw(Model.VideoYoutube)
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="columns large-12 panel">
+                <p>
+                    @Model.Descripcion
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

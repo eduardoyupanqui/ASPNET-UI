@@ -1,0 +1,268 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="TrailersDeVideoJuegosModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="TrailersDeVideoJuegosModelStoreContainer">
+          <EntitySet Name="Consola" EntityType="TrailersDeVideoJuegosModel.Store.Consola" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Genero" EntityType="TrailersDeVideoJuegosModel.Store.Genero" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Imagenes" EntityType="TrailersDeVideoJuegosModel.Store.Imagenes" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Juego" EntityType="TrailersDeVideoJuegosModel.Store.Juego" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Imagenes_Juego" Association="TrailersDeVideoJuegosModel.Store.FK_Imagenes_Juego">
+            <End Role="Juego" EntitySet="Juego" />
+            <End Role="Imagenes" EntitySet="Imagenes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Juego_Consola" Association="TrailersDeVideoJuegosModel.Store.FK_Juego_Consola">
+            <End Role="Consola" EntitySet="Consola" />
+            <End Role="Juego" EntitySet="Juego" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Juego_Genero" Association="TrailersDeVideoJuegosModel.Store.FK_Juego_Genero">
+            <End Role="Genero" EntitySet="Genero" />
+            <End Role="Juego" EntitySet="Juego" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Consola">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Genero">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="Imagenes">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JuegoId" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="JuegoId" Type="int" Nullable="false" />
+          <Property Name="UrlImagenMiniatura" Type="varchar(max)" Nullable="false" />
+          <Property Name="UrlImagenMediana" Type="varchar(max)" Nullable="false" />
+          <Property Name="EsPortada" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Juego">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Descripcion" Type="varchar(max)" />
+          <Property Name="GeneroId" Type="int" Nullable="false" />
+          <Property Name="ConsolaId" Type="int" Nullable="false" />
+          <Property Name="VideoYoutube" Type="varchar(max)" Nullable="false" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Imagenes_Juego">
+          <End Role="Juego" Type="TrailersDeVideoJuegosModel.Store.Juego" Multiplicity="1" />
+          <End Role="Imagenes" Type="TrailersDeVideoJuegosModel.Store.Imagenes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Juego">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Imagenes">
+              <PropertyRef Name="JuegoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Juego_Consola">
+          <End Role="Consola" Type="TrailersDeVideoJuegosModel.Store.Consola" Multiplicity="1" />
+          <End Role="Juego" Type="TrailersDeVideoJuegosModel.Store.Juego" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Consola">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Juego">
+              <PropertyRef Name="ConsolaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Juego_Genero">
+          <End Role="Genero" Type="TrailersDeVideoJuegosModel.Store.Genero" Multiplicity="1" />
+          <End Role="Juego" Type="TrailersDeVideoJuegosModel.Store.Juego" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genero">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Juego">
+              <PropertyRef Name="GeneroId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TrailersDeVideoJuegosModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="TrailersDeVideoJuegosEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Consola" EntityType="TrailersDeVideoJuegosModel.Consola" />
+          <EntitySet Name="Genero" EntityType="TrailersDeVideoJuegosModel.Genero" />
+          <EntitySet Name="Imagenes" EntityType="TrailersDeVideoJuegosModel.Imagenes" />
+          <EntitySet Name="Juego" EntityType="TrailersDeVideoJuegosModel.Juego" />
+          <AssociationSet Name="FK_Juego_Consola" Association="TrailersDeVideoJuegosModel.FK_Juego_Consola">
+            <End Role="Consola" EntitySet="Consola" />
+            <End Role="Juego" EntitySet="Juego" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Juego_Genero" Association="TrailersDeVideoJuegosModel.FK_Juego_Genero">
+            <End Role="Genero" EntitySet="Genero" />
+            <End Role="Juego" EntitySet="Juego" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Imagenes_Juego" Association="TrailersDeVideoJuegosModel.FK_Imagenes_Juego">
+            <End Role="Juego" EntitySet="Juego" />
+            <End Role="Imagenes" EntitySet="Imagenes" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Consola">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Juego" Relationship="TrailersDeVideoJuegosModel.FK_Juego_Consola" FromRole="Consola" ToRole="Juego" />
+        </EntityType>
+        <EntityType Name="Genero">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Juego" Relationship="TrailersDeVideoJuegosModel.FK_Juego_Genero" FromRole="Genero" ToRole="Juego" />
+        </EntityType>
+        <EntityType Name="Imagenes">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="JuegoId" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="Int32" Name="JuegoId" Nullable="false" />
+          <Property Type="String" Name="UrlImagenMiniatura" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="UrlImagenMediana" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="EsPortada" Nullable="false" />
+          <NavigationProperty Name="Juego" Relationship="TrailersDeVideoJuegosModel.FK_Imagenes_Juego" FromRole="Imagenes" ToRole="Juego" />
+        </EntityType>
+        <EntityType Name="Juego">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="Descripcion" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Int32" Name="GeneroId" Nullable="false" />
+          <Property Type="Int32" Name="ConsolaId" Nullable="false" />
+          <Property Type="String" Name="VideoYoutube" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="Activo" Nullable="false" />
+          <NavigationProperty Name="Consola" Relationship="TrailersDeVideoJuegosModel.FK_Juego_Consola" FromRole="Juego" ToRole="Consola" />
+          <NavigationProperty Name="Genero" Relationship="TrailersDeVideoJuegosModel.FK_Juego_Genero" FromRole="Juego" ToRole="Genero" />
+          <NavigationProperty Name="Imagenes" Relationship="TrailersDeVideoJuegosModel.FK_Imagenes_Juego" FromRole="Juego" ToRole="Imagenes" />
+        </EntityType>
+        <Association Name="FK_Juego_Consola">
+          <End Type="TrailersDeVideoJuegosModel.Consola" Role="Consola" Multiplicity="1" />
+          <End Type="TrailersDeVideoJuegosModel.Juego" Role="Juego" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Consola">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Juego">
+              <PropertyRef Name="ConsolaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Juego_Genero">
+          <End Type="TrailersDeVideoJuegosModel.Genero" Role="Genero" Multiplicity="1" />
+          <End Type="TrailersDeVideoJuegosModel.Juego" Role="Juego" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Genero">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Juego">
+              <PropertyRef Name="GeneroId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Imagenes_Juego">
+          <End Type="TrailersDeVideoJuegosModel.Juego" Role="Juego" Multiplicity="1" />
+          <End Type="TrailersDeVideoJuegosModel.Imagenes" Role="Imagenes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Juego">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Imagenes">
+              <PropertyRef Name="JuegoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TrailersDeVideoJuegosModelStoreContainer" CdmEntityContainer="TrailersDeVideoJuegosEntities">
+          <EntitySetMapping Name="Consola">
+            <EntityTypeMapping TypeName="TrailersDeVideoJuegosModel.Consola">
+              <MappingFragment StoreEntitySet="Consola">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genero">
+            <EntityTypeMapping TypeName="TrailersDeVideoJuegosModel.Genero">
+              <MappingFragment StoreEntitySet="Genero">
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Imagenes">
+            <EntityTypeMapping TypeName="TrailersDeVideoJuegosModel.Imagenes">
+              <MappingFragment StoreEntitySet="Imagenes">
+                <ScalarProperty Name="EsPortada" ColumnName="EsPortada" />
+                <ScalarProperty Name="UrlImagenMediana" ColumnName="UrlImagenMediana" />
+                <ScalarProperty Name="UrlImagenMiniatura" ColumnName="UrlImagenMiniatura" />
+                <ScalarProperty Name="JuegoId" ColumnName="JuegoId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Juego">
+            <EntityTypeMapping TypeName="TrailersDeVideoJuegosModel.Juego">
+              <MappingFragment StoreEntitySet="Juego">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="VideoYoutube" ColumnName="VideoYoutube" />
+                <ScalarProperty Name="ConsolaId" ColumnName="ConsolaId" />
+                <ScalarProperty Name="GeneroId" ColumnName="GeneroId" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

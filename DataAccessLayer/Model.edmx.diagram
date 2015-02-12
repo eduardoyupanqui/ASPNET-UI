@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="92f25522185e4847a79994b7496f32ad" Name="Diagrama1">
+        <EntityTypeShape EntityType="TrailersDeVideoJuegosModel.Consola" Width="1.5" PointX="57.5" PointY="6" />
+        <EntityTypeShape EntityType="TrailersDeVideoJuegosModel.Genero" Width="1.5" PointX="60.125" PointY="6" />
+        <EntityTypeShape EntityType="TrailersDeVideoJuegosModel.Imagenes" Width="1.5" PointX="61.375" PointY="9.375" />
+        <EntityTypeShape EntityType="TrailersDeVideoJuegosModel.Juego" Width="1.5" PointX="57.875" PointY="8.25" />
+        <AssociationConnector Association="TrailersDeVideoJuegosModel.FK_Juego_Consola" />
+        <AssociationConnector Association="TrailersDeVideoJuegosModel.FK_Juego_Genero" />
+        <AssociationConnector Association="TrailersDeVideoJuegosModel.FK_Imagenes_Juego" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,73 @@
+﻿@model Modelos.JuegosDTO
+
+@{
+    ViewBag.Title = "VistaPrevia";
+    Layout = null;
+}
+
+<ul id="myTab" class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#imagenes" id="imagenes-tab" role="tab" data-toggle="tab" aria-controls="imagenes" aria-expanded="true">Imagenes</a></li>
+    <li role="presentation" class=""><a href="#video" role="tab" id="video-tab" data-toggle="tab" aria-controls="video" aria-expanded="false">Video</a></li>
+</ul>
+<div id="myTabContent" class="tab-content">
+    <div role="tabpanel" class="tab-pane fade active in" id="imagenes" aria-labelledby="imagenes-tab">
+        <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <ol class="carousel-indicators">
+                @{
+                    var index = 0;
+                    if (Model.ListaImagenes != null)
+                    {
+                        foreach (var imagem in Model.ListaImagenes)
+                        {
+                            if (index == 0)
+                            {
+                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                            }
+                            else
+                            {
+                                <li data-target="#carousel-example-generic" data-slide-to="@index" class=""></li>
+                            }
+                            index++;
+                        }
+                    }
+                    }
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                @{
+                    var index2 = 0;
+                    if (Model.ListaImagenes != null)
+                    {
+                        foreach (var imagem in Model.ListaImagenes)
+                        {
+                            if (index2 == 0)
+                            {
+                                <div class="item active">
+                                    <img alt="@imagem.Id" src="@Url.Content(imagem.UrlImagenMediana)" data-holder-rendered="true">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="item">
+                                    <img alt="@imagem.Id" src="@Url.Content(imagem.UrlImagenMediana)" data-holder-rendered="true">
+                                </div>
+                            }
+                            index2++;
+                        }
+                    }
+                    }
+            </div>
+            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
+    </div>
+    <div role="tabpanel" class="tab-pane fade" id="video" aria-labelledby="video-tab">
+        @Html.Raw(Model.VideoYoutube);
+    </div>
+</div>
+

@@ -1,0 +1,171 @@
+﻿@model Modelos.JuegosDTO
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = null;
+}
+
+<h2>Edit</h2>
+
+@using (Html.BeginForm("editar", "juegos", FormMethod.Post, new { id="JuegosForm", enctype = "multipart/form-data"}))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="form-horizontal">
+        @Html.HiddenFor(model => model.Id)
+        <div class="tabbable" id="MyTabs">
+            <ul id="myTab" class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#general" id="general-tab" role="tab" data-toggle="tab" aria-controls="general" aria-expanded="true">General</a></li>
+                <li role="presentation"><a href="#descripcion" id="descripcion-tab" role="tab" data-toggle="tab" aria-controls="descripcion" aria-expanded="false">Descripcion</a></li>
+                <li role="presentation"><a href="#imagenes" id="imagenes-tab" role="tab" data-toggle="tab" aria-controls="imagenes" aria-expanded="false">Imagenes</a></li>
+                <li role="presentation"><a href="#video" id="video-tab" role="tab" data-toggle="tab" aria-controls="video" aria-expanded="false">Video</a></li>
+            </ul>
+            <div id="myTabContent" class="tab-content">
+                <div role="tabpanel" class="tab-pane fade active in" id="general" aria-labelledby="general-tab">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Nombre)
+                        </div>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Nombre)
+                            @Html.ValidationMessageFor(model => model.Nombre)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.GeneroId)
+                        </div>
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.GeneroId, new SelectList(Model.ListaGeneros, "Id", "Nombre"), "Seleccione un genero")
+                            @Html.ValidationMessageFor(model => model.GeneroId)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.ConsolaId)
+                        </div>
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => model.ConsolaId, new SelectList(Model.ListaConsolas, "Id", "Nombre"), "Seleccione una consola")
+                            @Html.ValidationMessageFor(model => model.ConsolaId)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Activo)
+                        </div>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Activo)
+                            @Html.ValidationMessageFor(model => model.Activo)
+                        </div>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane fade" id="descripcion" aria-labelledby="descripcion-tab">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.Descripcion)
+                        </div>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.Descripcion)
+                            @Html.ValidationMessageFor(model => model.Descripcion)
+                        </div>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane fade" id="imagenes" aria-labelledby="imagenes-tab">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <a href="#" id="add" class="btn btn-primary">Agregar Imagen</a>
+                        </div>
+                        <div class="col-md-12">
+                            <div id="divImagenesDTO">
+
+
+                                @if (Model.ListaImagenes != null)
+                                {
+                                    foreach (var imagen in Model.ListaImagenes)
+                                    {
+
+                                        var guid = Guid.NewGuid().ToString();
+                                    
+                                    <div class="editorRow">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="hidden" name="ListaImagenes.index" value="@guid" />
+                                                <!--Crea un nuevo item en ListaImagenes-->
+
+                                                <!--Almacenamos los valores de cada imagen en inputs de tipo hidden para retornarlos en el post-->
+                                                <input type="hidden" name="ListaImagenes[@guid].Id" value="@imagen.Id" />
+                                                <input type="hidden" name="ListaImagenes[@guid].JuegoId" value="@imagen.JuegoId" />
+                                                <input type="hidden" name="ListaImagenes[@guid].UrlImagenMiniatura" value="@imagen.UrlImagenMiniatura" />
+                                                <input type="hidden" name="ListaImagenes[@guid].UrlImagenMediana" value="@imagen.UrlImagenMediana" />
+
+                                                <img src="@Url.Content(imagen.UrlImagenMiniatura)" alt="@imagen.Id" />
+                                            </div>
+                                            <div class="col-md-2">
+                                                <a href="#" id="@imagen.Id" class="deleteRow">Eliminar</a>
+                                            </div>
+                                            <div class="col-md-3">
+                                                Es Portada
+
+                                            @{
+                                    if (imagen.EsPortada)
+                                    {
+                                                <input class="radioEsPortada" type = "radio" name = "ListaImagenes[@guid].EsPortada" value="true" checked="checked" />
+                                                }
+                                                else
+                                                {
+                                                <input class="radioEsPortada" type = "radio" name = "ListaImagenes[@guid].EsPortada" />
+                                                }
+                                            }
+
+
+
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                
+                                                                    
+                                }
+
+                            }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div role="tabpanel" class="tab-pane fade" id="video" aria-labelledby="video-tab">
+                    <br />
+                    <div class="row">
+                        <div class="col-md-2">
+                            @Html.LabelFor(model => model.VideoYoutube)
+                        </div>
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.VideoYoutube)
+                            @Html.ValidationMessageFor(model => model.VideoYoutube)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button id="btnSalvar" type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+@Scripts.Render("~/bundles/jqueryval")
+<script src="~/Scripts/Juegos/juegos-modal.js"></script>
+<script src="~/Scripts/Juegos/juegos-imagenes.js"></script>

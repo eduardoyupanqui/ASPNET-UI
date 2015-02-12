@@ -1,0 +1,131 @@
+﻿@model PagedList.IPagedList<Modelos.JuegosDTO>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <button id="btnNuevo" type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">Nuevo</button>
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">Mantenimietno de Juegos</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div id="modal-content"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h3>Juegos</h3>
+    </div>
+</div>
+
+@using (Html.BeginForm("Index", "Juegos", FormMethod.Get, new { @class = "form-search" }))
+{
+    <div class="row-fluid">
+        <div class="col-md-offset-9">
+            @Html.TextBox("SearchString", (string)ViewBag.CurrentFilter , new { @class = "input-medium search-query", placeholder = "Ingrese su criterio" })
+            <button type="submit" class="btn">Buscar</button>
+        </div>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        @Html.ActionLink("Nombre", "Index", new { sortOrder = ViewBag.Nombre, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>Descripcion                        
+                    </th>
+                    <th>
+                        @Html.ActionLink("Genero", "Index", new { sortOrder = ViewBag.Genero, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>
+                        @Html.ActionLink("Consola", "Index", new { sortOrder = ViewBag.Consola, currentFilter = ViewBag.CurrentFilter })
+                    </th>
+                    <th>Activo                        
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @{
+                                if (item.ListaImagenes != null && item.ListaImagenes.Any())
+                                {
+                                    var imagen = item.ListaImagenes.FirstOrDefault();
+                        
+                                    if (imagen != null)
+                                    {                                    
+                                        <img src="@Url.Content(imagen.UrlImagenMiniatura)" alt="@item.Nombre" />
+                                    }
+                                }   
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nombre)
+                        </td>
+                        <td>
+                            @{
+                                var descripcion = item.Descripcion;
+
+                                if (descripcion != null && descripcion.Length > 30)
+                                {
+                                    descripcion = descripcion.Substring(0, 30) + "...";
+                                }
+                            }
+
+                            @descripcion
+
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.GenerosDTO.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ConsolasDTO.Nombre)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Activo)
+                        </td>
+                        <td>
+                            <a href="#myModal" class="btnVistaPrevia btn btn-default btn-xs" data-id="@item.Id" data-toggle="modal"><i class="glyphicon glyphicon-eye-open"></i>Vista Previa </a>
+                            <a href="#myModal" class="btnEditar btn btn-default btn-xs" data-id="@item.Id" data-toggle="modal"><i class="glyphicon glyphicon-pencil"></i>Editar </a>
+                            <a href="#myModal" class="btnEliminar btn btn-default btn-xs" data-id="@item.Id" data-toggle="modal"><i class="glyphicon glyphicon-trash"></i>Eliminar </a>
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))
+
+    </div>
+</div>
+
+
+
+@section scripts
+{
+    <script src="~/Scripts/Juegos/Juegos.js"></script>
+    }

@@ -1,0 +1,130 @@
+﻿@model PagedList.IPagedList<Modelos.JuegosDTO>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = ViewBag.NombreConsola;
+}
+
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+
+<div class="row panel-custom">
+    <div class="columns large-12">
+        <div class="row">
+            <div class="columns large-12">
+                <ul class="breadcrumbs">
+                    <li><a href="/">Inicio</a></li>
+                    <li>@ViewBag.NombreConsola</li>
+                </ul>
+            </div>
+        </div>
+
+        @using (Html.BeginForm("Index", "Juegos", FormMethod.Get))
+        {
+            <div class="row">
+                <div class="columns large-6">
+                    <h3>
+                        <a href="@ViewBag.UrlConsola">
+                            @ViewBag.NombreConsola
+                        </a>
+                    </h3>
+                </div>
+                <div class="columns large-6">
+                    <div class="row collapse">
+                        <div class="columns large-9">
+                            @Html.TextBox("criterioBusqueda", ViewBag.CurrentFilter as string, new { placeholder = "Ingresa tu criterio", value = ViewBag.CriterioBusqueda })
+                        </div>
+                        <div class="columns large-3">
+                            <input class="button postfix" type="submit" value="Buscar" />
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        }
+
+        <hr />
+
+        <div class="row">
+            <div class="columns large-3">
+                <ul class="side-nav">
+                    @{ Html.RenderAction("index", "generos", new { consolaId = ViewBag.ConsolaId }); }
+                </ul>
+            </div>
+
+            <div class="columns large-9">
+                @{
+                    var tresVideosPorLinea = 1;
+                }
+                @foreach (var item in Model)
+                {
+                    if (tresVideosPorLinea == 1)
+                    {
+                    @Html.Raw("<div class='row'>")                           
+                    }
+
+                    var classdeUltimoItem = string.Empty;
+
+                    if (item == Model.Last())
+                    {
+                        classdeUltimoItem = "end";
+                    }
+                            
+                    <div class="columns large-4 @classdeUltimoItem">
+                        <div class="row">
+                            <div class="columns large-4">
+                                <a href="@(ViewBag.UrlConsola + "/" + item.NombreJuegoParaUrl)">
+                                    @{
+                                        var urlImagenes = System.Configuration.ConfigurationManager.AppSettings["UrlImagenes"];
+
+                                        if (item.ListaImagenes != null && item.ListaImagenes.Any())
+                                        {
+                                            var imagen = item.ListaImagenes.First();
+                                    
+                                            <img src="@Url.Content(urlImagenes + imagen.UrlImagenMiniatura.Replace("~", ""))" alt="@item.Nombre" />
+                                        }   
+                                    }
+                                </a>
+                            </div>
+
+                            <div class="columns large-8">
+                                <h6>
+                                    <a href="@(ViewBag.UrlConsola + "/" + item.NombreJuegoParaUrl)">
+                                        @item.Nombre
+                                    </a>
+                                </h6>
+                            </div>
+
+                        </div>
+                    </div>
+                        
+                    tresVideosPorLinea++;
+
+                    if (tresVideosPorLinea > 3 || item == Model.Last())
+                    {
+                    @Html.Raw("</div>") 
+
+                        tresVideosPorLinea = 1;
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="columns large-9 large-offset-3">
+        @{
+            var generoId = "0";
+            
+            if(Request.QueryString["generoId"] != null)
+            {
+                generoId = Request.QueryString["generoId"];
+            }
+            
+
+        }
+
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter, generoId = generoId, criterioBusqueda = ViewBag.CriterioBusqueda }))
+    </div>
+</div>

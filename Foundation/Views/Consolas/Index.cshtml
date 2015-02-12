@@ -1,0 +1,14 @@
+﻿@model IEnumerable<Modelos.ConsolasDTO>
+
+@{
+    Layout = null;
+}
+
+
+@foreach (var consola in Model)
+{
+    <li>
+        @Html.ActionLink(consola.Nombre, "index", "juegos", new {  nombreconsola = consola.Nombre.Replace(" ","-") }, 
+        new { @class = ViewBag.Class })
+    </li>
+}
