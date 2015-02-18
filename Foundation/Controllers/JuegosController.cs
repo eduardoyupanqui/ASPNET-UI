@@ -21,10 +21,10 @@ namespace Foundation.Controllers
             _generos = generos;
         }
 
-        public JuegosController() : this(new Juegos(), new Consolas(), new Generos())
-        {
+        //public JuegosController() : this(new Juegos(), new Consolas(), new Generos())
+        //{
 
-        }
+        //}
 
         public ActionResult Index(string nombreconsola, string currentFilter, int? page, int generoId = 0, string criterioBusqueda = "")
         {
@@ -71,6 +71,14 @@ namespace Foundation.Controllers
             }
 
             return View(juego);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            //_consolas.Dispose();
+            //_generos.Dispose();
+            //_juegos.Dispose();
         }
     }
 }

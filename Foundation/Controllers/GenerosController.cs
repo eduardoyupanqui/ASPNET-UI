@@ -15,11 +15,11 @@ namespace Foundation.Controllers
             _generos = generos;
         }
 
-        public GenerosController()
-            : this(new Generos())
-        {
+        //public GenerosController()
+        //    : this(new Generos())
+        //{
 
-        }
+        //}
 
         [ChildActionOnly]
         public ActionResult Index(string @class)
@@ -31,5 +31,11 @@ namespace Foundation.Controllers
             return PartialView(generos);
         }
 
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            //_generos.Dispose();
+        }
     }
 }

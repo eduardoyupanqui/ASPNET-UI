@@ -7,7 +7,7 @@ using Modelos;
 
 namespace DataAccessLayer
 {
-    public interface IJuegos
+    public interface IJuegos : IDisposable
     {
         void AgregarJuegos(JuegosDTO JuegoDTO);
         JuegosDTO ObtenerJuego(int juegoId, bool incluirPortada = true); //Read

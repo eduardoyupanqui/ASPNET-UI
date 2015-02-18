@@ -7,7 +7,7 @@ using Modelos;
 
 namespace DataAccessLayer
 {
-    public interface IConsolas
+    public interface IConsolas : IDisposable
     {
         void AgregarConsolas(ConsolasDTO consolasDTO);
         ConsolasDTO ObtenerConsola(int consolaId);

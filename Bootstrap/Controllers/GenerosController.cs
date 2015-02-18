@@ -15,11 +15,11 @@ namespace Bootstrap.Controllers
         {
             _Generos = Genero;
         }
-        public GenerosController()
-            : this(new Generos())
-        {
+        //public GenerosController()
+        //    : this(new Generos(new TrailersDeVideoJuegosEntities()))
+        //{
 
-        }
+        //}
         //
         // GET: /Generos/
         public ActionResult Index()
@@ -73,6 +73,13 @@ namespace Bootstrap.Controllers
         {
             _Generos.EliminarGenero(id);
             return RedirectToAction("Index");
+        }
+
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            _Generos.Dispose();
         }
     }
 }

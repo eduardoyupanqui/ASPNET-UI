@@ -15,10 +15,11 @@ namespace Bootstrap.Controllers
         {
             _consolas = consola;
         }
-        public ConsolasController() :this(new Consolas())
-        {
+        //public ConsolasController()
+        //    : this(new Consolas(new TrailersDeVideoJuegosEntities()))
+        //{
 
-        }
+        //}
         //
         // GET: /Consolas/
         public ActionResult Index()
@@ -72,6 +73,14 @@ namespace Bootstrap.Controllers
         {
             _consolas.EliminarConsola(id);
             return RedirectToAction("Index");
+        }
+
+
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            _consolas.Dispose();
         }
 	}
 }

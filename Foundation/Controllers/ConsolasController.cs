@@ -16,10 +16,10 @@ namespace Foundation.Controllers
             _consolas = consolas;
         }
 
-        public ConsolasController() : this(new Consolas())
-        {
+        //public ConsolasController() : this(new Consolas())
+        //{
 
-        }
+        //}
 
         [ChildActionOnly]
         public ActionResult Index(string @class)
@@ -31,5 +31,12 @@ namespace Foundation.Controllers
             return PartialView(consolas);
         }
 
+
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            //_consolas.Dispose();
+        }
     }
 }

@@ -22,11 +22,11 @@ namespace Bootstrap.Controllers
             _consolas = consolas;
             _generos = generos;
         }
-        public JuegosController() 
-            : this( new Juegos(), new Consolas(), new Generos())
-        {
+        //public JuegosController()
+        //    : this(new Juegos(new TrailersDeVideoJuegosEntities()), new Consolas(new TrailersDeVideoJuegosEntities()), new Generos(new TrailersDeVideoJuegosEntities()))
+        //{
 
-        }
+        //}
         //
         // GET: /Juegos/
         public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
@@ -178,5 +178,14 @@ namespace Bootstrap.Controllers
             return View(juegoDTO);
         }
 
+
+
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+            _consolas.Dispose();
+            _generos.Dispose();
+            _juegos.Dispose();
+        }
 	}
 }

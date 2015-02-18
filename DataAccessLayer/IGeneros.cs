@@ -7,7 +7,7 @@ using Modelos;
 
 namespace DataAccessLayer
 {
-    public interface IGeneros
+    public interface IGeneros : IDisposable
     {
         void AgregarGeneros(GenerosDTO GenerosDTO);
         GenerosDTO ObtenerGenero(int GeneroId);

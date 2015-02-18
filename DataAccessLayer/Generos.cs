@@ -9,65 +9,61 @@ namespace DataAccessLayer
 {
     public class Generos : IGeneros
     {
+        private TrailersDeVideoJuegosEntities _dbcontext;
+
+        public Generos(TrailersDeVideoJuegosEntities dbcontext)
+        {
+            _dbcontext = dbcontext;
+        }
+
         public void AgregarGeneros(GenerosDTO GenerosDTO)
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
-            {
-                var nuevaGenero = new Genero();
-                nuevaGenero.Nombre = GenerosDTO.Nombre;
-                dbcontext.Genero.Add(nuevaGenero);
-                dbcontext.SaveChanges();
-            }
+            var nuevaGenero = new Genero();
+            nuevaGenero.Nombre = GenerosDTO.Nombre;
+            _dbcontext.Genero.Add(nuevaGenero);
+            _dbcontext.SaveChanges();
         }
 
         public GenerosDTO ObtenerGenero(int GeneroId)
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
-            {
-                var Genero = dbcontext.Genero.FirstOrDefault(c => c.Id == GeneroId);
+            var Genero = _dbcontext.Genero.FirstOrDefault(c => c.Id == GeneroId);
 
-                return Genero != null ? new GenerosDTO() { Id = Genero.Id, Nombre = Genero.Nombre } : new GenerosDTO();
-                
-            }
+            return Genero != null ? new GenerosDTO() { Id = Genero.Id, Nombre = Genero.Nombre } : new GenerosDTO();
         }
 
         public List<GenerosDTO> ObtenerGeneros()
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
-            {
-                List<GenerosDTO> lista = new List<GenerosDTO>();
-                List<GenerosDTO> lista2 = new List<GenerosDTO>();
-                dbcontext.Genero.ToList().ForEach(c => lista.Add( new GenerosDTO(){Id = c.Id,Nombre=c.Nombre}));
-                lista2 = dbcontext.Genero.ToList().Select(c => new GenerosDTO() { Id = c.Id, Nombre = c.Nombre }).ToList();
+            List<GenerosDTO> lista = new List<GenerosDTO>();
+            List<GenerosDTO> lista2 = new List<GenerosDTO>();
+            _dbcontext.Genero.ToList().ForEach(c => lista.Add(new GenerosDTO() { Id = c.Id, Nombre = c.Nombre }));
+            lista2 = _dbcontext.Genero.ToList().Select(c => new GenerosDTO() { Id = c.Id, Nombre = c.Nombre }).ToList();
 
-                return lista; 
-            }
+            return lista;
         }
 
         public void ActualizarGeneros(GenerosDTO GenerosDTO)
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
+            var Genero = _dbcontext.Genero.FirstOrDefault(c => c.Id == GenerosDTO.Id);
+            if (Genero != null)
             {
-                var Genero = dbcontext.Genero.FirstOrDefault(c => c.Id == GenerosDTO.Id);
-                if (Genero != null)
-	            {
-                    Genero.Nombre = GenerosDTO.Nombre;
-                    dbcontext.SaveChanges();
-	            }
+                Genero.Nombre = GenerosDTO.Nombre;
+                _dbcontext.SaveChanges();
             }
         }
 
         public void EliminarGenero(int GeneroId)
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
+            var Genero = _dbcontext.Genero.FirstOrDefault(c => c.Id == GeneroId);
+            if (Genero != null)
             {
-                var Genero = dbcontext.Genero.FirstOrDefault(c => c.Id == GeneroId);
-                if (Genero != null)
-                {
-                    dbcontext.Genero.Remove(Genero);
-                    dbcontext.SaveChanges();
-                }
+                _dbcontext.Genero.Remove(Genero);
+                _dbcontext.SaveChanges();
             }
+        }
+
+        public void Dispose()
+        {
+            this._dbcontext.Dispose();
         }
     }
 }

@@ -10,8 +10,10 @@ namespace DataAccessLayer
 {
     public class Juegos : IJuegos
     {
-        public Juegos()
+        private TrailersDeVideoJuegosEntities _dbcontext;
+        public Juegos(TrailersDeVideoJuegosEntities dbcontext)
         {
+            _dbcontext = dbcontext;
             //->
             Mapper.CreateMap<JuegosDTO, Juego>();
             Mapper.CreateMap<ConsolasDTO, Consolas>();
@@ -26,8 +28,6 @@ namespace DataAccessLayer
 
         public void AgregarJuegos(JuegosDTO JuegoDTO)
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
-            {
                 //var nuevoJuego = new Juego();
                 //nuevoJuego.Nombre = JuegoDTO.Nombre;
                 //nuevoJuego.Descripcion = JuegoDTO.Descripcion;
@@ -49,16 +49,13 @@ namespace DataAccessLayer
                 var nuevoJuego = Mapper.Map<Juego>(JuegoDTO);
                 nuevoJuego.Imagenes = Mapper.Map<ICollection<Imagenes>>(JuegoDTO.ListaImagenes);
 
-                dbcontext.Juego.Add(nuevoJuego);
-                dbcontext.SaveChanges();
-            }
+                _dbcontext.Juego.Add(nuevoJuego);
+                _dbcontext.SaveChanges();
         }
 
         public JuegosDTO ObtenerJuego(int JuegoId, bool incluirPortada = true)
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
-            {
-                var juego = dbcontext.Juego.FirstOrDefault(j => j.Id == JuegoId);
+                var juego = _dbcontext.Juego.FirstOrDefault(j => j.Id == JuegoId);
 
                 var juegoDTO = Mapper.Map<JuegosDTO>(juego);
                 juegoDTO.ConsolasDTO = Mapper.Map<ConsolasDTO>(juego.Consola);
@@ -75,15 +72,12 @@ namespace DataAccessLayer
                 }
                 return juegoDTO;
 
-            }
         }
         public JuegosDTO ObtenerJuego(string nombreConsola, string nombreJuego, bool incluirPortada = true)
         {
-            using (var dbContext = new TrailersDeVideoJuegosEntities())
-            {
                 nombreConsola = nombreConsola.Replace("-", " ");
 
-                var juegos = dbContext.Juego.Where(r => r.Consola.Nombre.ToLower() == nombreConsola.ToLower()
+                var juegos = _dbcontext.Juego.Where(r => r.Consola.Nombre.ToLower() == nombreConsola.ToLower()
                     && r.Nombre.StartsWith(nombreJuego.Substring(0, 1)));
 
                 Juego juego = null;
@@ -115,14 +109,11 @@ namespace DataAccessLayer
                 }
 
                 return juegoDTO;
-            }
         }
 
         public List<JuegosDTO> ObtenerJuegos()
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
-            {
-                var juegos = dbcontext.Juego;
+                var juegos = _dbcontext.Juego;
 
                 var listaJuegos = new List<JuegosDTO>();
 
@@ -149,19 +140,16 @@ namespace DataAccessLayer
                 }
 
                 return listaJuegos;
-            }
         }
         public List<JuegosDTO> ObtenerJuegos(string criteriodeBusqueda, string campoOrdenamiento)
         {
             var listaJuegos = new List<JuegosDTO>();
 
-            using (var dbContext = new TrailersDeVideoJuegosEntities())
-            {
-                var juegos = dbContext.Juego.AsQueryable();
+                var juegos = _dbcontext.Juego.AsQueryable();
 
                 if (!String.IsNullOrEmpty(criteriodeBusqueda))
                 {
-                    juegos = (from j in dbContext.Juego
+                    juegos = (from j in _dbcontext.Juego
                                 where
                                 j.Nombre.ToUpper().Contains(criteriodeBusqueda.ToUpper())
                                 ||
@@ -214,7 +202,6 @@ namespace DataAccessLayer
                 }
 
                 return listaJuegos;
-            }
         }
         public List<JuegosDTO> ObtenerJuegos(string nombreConsola, int generoId, string criterioBusqueda)
         {
@@ -222,9 +209,8 @@ namespace DataAccessLayer
 
             nombreConsola = nombreConsola.Replace("-", " ");
 
-            using (var dbContext = new TrailersDeVideoJuegosEntities())
-            {
-                var juegos = dbContext.Juego.Where(r => r.Consola.Nombre.ToLower() == nombreConsola.ToLower());
+
+                var juegos = _dbcontext.Juego.Where(r => r.Consola.Nombre.ToLower() == nombreConsola.ToLower());
 
                 if (generoId > 0)
                 {
@@ -259,15 +245,13 @@ namespace DataAccessLayer
                 }
 
                 return listaJuegos;
-            }
+            
         }
 
 
         public void ActualizarJuegos(JuegosDTO juegoDTO)
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
-            {
-                var juego = dbcontext.Juego.FirstOrDefault(r => r.Id == juegoDTO.Id);
+                var juego = _dbcontext.Juego.FirstOrDefault(r => r.Id == juegoDTO.Id);
 
                 if (juego != null)
                 {
@@ -293,23 +277,20 @@ namespace DataAccessLayer
                         }
                     }
 
-                    dbcontext.SaveChanges();
+                    _dbcontext.SaveChanges();
                 }
 
-            }
         }
 
         public void EliminarJuego(int JuegoId)
         {
-            using (var dbcontext = new TrailersDeVideoJuegosEntities())
-            {
-                var Juego = dbcontext.Juego.FirstOrDefault(c => c.Id == JuegoId);
+            
+                var Juego = _dbcontext.Juego.FirstOrDefault(c => c.Id == JuegoId);
                 if (Juego != null)
                 {
-                    dbcontext.Juego.Remove(Juego);
-                    dbcontext.SaveChanges();
+                    _dbcontext.Juego.Remove(Juego);
+                    _dbcontext.SaveChanges();
                 }
-            }
         }
 
         private string RemoverCaracteresEspeciales(string nombreJuego)
@@ -330,6 +311,11 @@ namespace DataAccessLayer
             nuevoNombreJuego = nuevoNombreJuego.Replace(" ", "-");
 
             return nuevoNombreJuego;
+        }
+
+        public void Dispose()
+        {
+            this._dbcontext.Dispose();
         }
     }
 }
